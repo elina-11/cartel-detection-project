@@ -1,4 +1,17 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/i9Zy4NKR)
+
+# Project Topic 
+
+## Objective: 
+This project aims to detect potential collusion between firms in procurement markets by analyzing patterns in historical price or bid data. 
+
+## Data: 
+The analysis uses synthetic auction data simulating multiple firms across repeated auctions, with optional application to publicly available procurement datasets for real-world validation. 
+
+## Method: 
+A network-based approach is implemented, where firms are represented as nodes and co-bidding behavior as weighted edges, and collusion likelihood is quantified using metrics such as network cohesion and exclusivity, complemented by visualizations of suspicious firm interactions.
+
+
 # Econ Project Templates: Modern, Reproducible Research in Economics
 
 ![MIT license](https://img.shields.io/github/license/OpenSourceEconomics/econ-project-templates)
