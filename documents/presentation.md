@@ -5,22 +5,22 @@ class: text-center
 highlighter: shiki
 lineNumbers: false
 info: |
-  ## EXAMPLE PROJECT
+  ## FINAL PROJECT
   Academic presentation with Slidev
 drawings:
   persist: false
 transition: fade
-title: EXAMPLE PROJECT
+title: FINAL PROJECT
 mdc: true
 defaults:
   layout: center
 ---
 
-# EXAMPLE PROJECT
+# FINAL PROJECT
 
-JANE DOE
+ELINA DAS
 
-EXAMPLE UNIVERSITY
+UNIVERSITY OF BONN
 
 ---
 

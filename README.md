@@ -1,22 +1,30 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/i9Zy4NKR)
 
-# Project Topic 
+# Project Topic
 
-## Objective: 
-This project aims to detect potential collusion between firms in procurement markets by analyzing patterns in historical price or bid data. 
+## Objective:
 
-## Data: 
-The analysis uses synthetic auction data simulating multiple firms across repeated auctions, with optional application to publicly available procurement datasets for real-world validation. 
+This project aims to detect potential collusion between firms in procurement markets by
+analyzing patterns in historical price or bid data.
 
-## Method: 
-A network-based approach is implemented, where firms are represented as nodes and co-bidding behavior as weighted edges, and collusion likelihood is quantified using metrics such as network cohesion and exclusivity, complemented by visualizations of suspicious firm interactions.
+## Data:
 
+The analysis uses synthetic auction data simulating multiple firms across repeated
+auctions, with optional application to publicly available procurement datasets for
+real-world validation.
+
+## Method:
+
+A network-based approach is implemented, where firms are represented as nodes and
+co-bidding behavior as weighted edges, and collusion likelihood is quantified using
+metrics such as network cohesion and exclusivity, complemented by visualizations of
+suspicious firm interactions.
 
 # Econ Project Templates: Modern, Reproducible Research in Economics
 
 ![MIT license](https://img.shields.io/github/license/OpenSourceEconomics/econ-project-templates)
 [![Documentation Status](https://readthedocs.org/projects/econ-project-templates/badge/?version=stable)](https://econ-project-templates.readthedocs.io/en/stable/)
-[![image](https://github.com/OpenSourceEconomics/econ-project-templates/actions/workflows/main.yml/badge.svg)](https://github.com/OpenSourceEconomics/econ-project-templates/actions/workflows/main.yml)
+[![image](https://github.com/iame-uni-bonn/final-project-elina-11.git/actions/workflows/main.yml/badge.svg)](https://github.com/iame-uni-bonn/final-project-elina-11.git/actions/workflows/main.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/OpenSourceEconomics/econ-project-templates/main.svg)](https://results.pre-commit.ci/latest/github/OpenSourceEconomics/econ-project-templates/main)
 
 This project provides a "batteries-included" template for economists to produce fully
@@ -59,7 +67,7 @@ Full documentation is available at
 
 We welcome suggestions on anything from improving the documentation to reporting bugs
 and requesting new features. Please open an
-[issue](https://github.com/OpenSourceEconomics/econ-project-templates/issues) in these
+[issue](https://github.com/iame-uni-bonn/final-project-elina-11.git/issues) in these
 cases.
 
 ### Contributors

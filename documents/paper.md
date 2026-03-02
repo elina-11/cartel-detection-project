@@ -1,4 +1,4 @@
-# EXAMPLE PROJECT
+# FINAL PROJECT
 
 +++ {"part": "abstract"}
 

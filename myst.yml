@@ -3,11 +3,11 @@
 version: 1
 project:
   id: template-project
-  title: EXAMPLE PROJECT
+  title: FINAL PROJECT
   description: Template for reproducible research projects in economics
   authors:
-    - name: JANE DOE
-      affiliations: [EXAMPLE UNIVERSITY]
+    - name: ELINA DAS
+      affiliations: [UNIVERSITY OF BONN]
       email: janedoe@example-university.de
   keywords: [economics, reproducible research]
   toc:
