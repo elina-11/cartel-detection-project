@@ -45,8 +45,9 @@ def create_firms(n_firms: int, seed: int) -> pd.DataFrame:
         seed(int) : Seed for reproducibility.
 
     Returns:
-        pd.DataFrame : DataFrame with columns ['firm_id', 'x', 'y']."""
-
+        pd.DataFrame : DataFrame with columns ['firm_id', 'x', 'y'].
+    """
+    
     rng = np.random.default_rng(seed)
     coordinates = rng.uniform(low=0.0, high=1.0, size=(n_firms, 2))
 
@@ -58,3 +59,26 @@ def create_firms(n_firms: int, seed: int) -> pd.DataFrame:
         }
     )
     return firms
+
+def create_issuers(n_issuers : int, seed : int,) -> pd.DataFrame:
+    """This function generates contract issuers placed uniformly
+    at random in the unit square.
+    Args:
+        n_issuers(int) : The number of issuers to generate.
+        seed(int) : Seed for reproducibility.
+
+    Returns:
+        pd.DataFrame : DataFrame with columns ['issuer_id', 'x', 'y'].
+    """
+
+    rng = np.random.default_rng(seed)
+    coordinates = rng.uniform(low=0.0, high=1.0, size=(n_issuers, 2),)
+
+    issuers = pd.DataFrame(
+        {
+            "issuer_id" : np.arange(n_issuers), 
+            "x" : coordinates[:, 0],
+            "y" : coordinates[:, 1],
+        }
+    )
+    return issuers
