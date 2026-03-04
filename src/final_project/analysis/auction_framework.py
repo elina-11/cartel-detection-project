@@ -3,6 +3,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from final_project.analysis.contract_generation import generate_contract_near_issuer
 
 class SimulationState:
     """Stores the evolving state of the simulation."""
@@ -22,17 +23,28 @@ class SimulationState:
 def run_single_round(
     round_number: int, state: SimulationState, rng: np.random.Generator
 ) -> None:
-    """Placeholder for one auction round.
+    """This will run one auction round.
 
-    In later steps, this will:
-    - Select a random issuer
-    - Generate contract location
+    Now this step:
+    - Selects a random issuer
+    - Generates a contract location near the issuer within the unit square
+    - logs the generated contract information in the state.
+    
+    Later the function will also:
     - Compute participating firms
     - Decide if firms collude or compete
     - Update memory and interaction counts
     """
-
-
+    contract = generate_contract_near_issuer(state.issuers_df, rng)
+    state.round_log.append(
+        {
+            "round_number": round_number,
+            "issuer_id": contract["issuer_id"],
+            "contract_x": contract["contract_x"],
+            "contract_y": contract["contract_y"],
+        }
+    )
+    
 def run_simulation(
     n_rounds: int, state: SimulationState, seed: int = 42
 ) -> SimulationState:
