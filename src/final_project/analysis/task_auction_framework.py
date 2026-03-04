@@ -24,7 +24,6 @@ def task_run_auction_simulation(
     """The function initializes the simulation state with firms and issuers,
     runs a few rounds of the auction framework, and saves the state.
     """
-    
     # Generating firms and issuers
     firms_df = create_firms(n_firms=N_FIRMS, seed=FIRMS_SEED)
     issuers_df = create_issuers(n_issuers=N_ISSUERS, seed=ISSUERS_SEED)
