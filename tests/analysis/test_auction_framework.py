@@ -29,12 +29,16 @@ def issuers_df() -> pd.DataFrame:
 
 
 @pytest.fixture
-def state(firms_df, issuers_df) -> SimulationState:
+def state(firms_df: pd.DataFrame, issuers_df: pd.DataFrame) -> SimulationState:
     """The function initialises the simulation state."""
     return SimulationState(firms_df=firms_df, issuers_df=issuers_df)
 
 
-def test_simulation_state_initialization(state, firms_df, issuers_df):
+def test_simulation_state_initialization(
+    state: SimulationState,
+    firms_df: pd.DataFrame,
+    issuers_df: pd.DataFrame,
+) -> None:
     # Checks if firms and issuers are stored correctly
     pd.testing.assert_frame_equal(state.firms_df, firms_df)
     pd.testing.assert_frame_equal(state.issuers_df, issuers_df)
@@ -51,14 +55,14 @@ def test_simulation_state_initialization(state, firms_df, issuers_df):
     assert state.round_log == []
 
 
-def test_run_single_round_placeholder(state):
+def test_run_single_round_placeholder(state: SimulationState) -> None:
     rng = np.random.default_rng(seed=SIMULATION_SEED)
 
     # Since it's a placeholder, it should just not fail
     run_single_round(round_number=1, state=state, rng=rng)
 
 
-def test_run_simulation_runs(state):
+def test_run_simulation_runs(state: SimulationState) -> None:
     # Run for 3 rounds to test
     updated_state = run_simulation(n_rounds=3, state=state, seed=SIMULATION_SEED)
 

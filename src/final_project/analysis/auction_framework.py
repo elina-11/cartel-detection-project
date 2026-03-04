@@ -21,7 +21,7 @@ class SimulationState:
 
 def run_single_round(
     round_number: int, state: SimulationState, rng: np.random.Generator
-):
+) -> None:
     """Placeholder for one auction round.
 
     In later steps, this will:
