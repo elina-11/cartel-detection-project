@@ -18,7 +18,6 @@ def _compute_firm_distances(
     Returns:
         pd.Series: Distances indexed by firm_id.
     """
-    
     dx = firms_df["x"] - contract_x
     dy = firms_df["y"] - contract_y
 
