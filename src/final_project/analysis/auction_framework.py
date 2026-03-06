@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from final_project.analysis.contract_generation import generate_contract_near_issuer
-
+from final_project.analysis.firm_participation import select_participating_firms
 class SimulationState:
     """Stores the evolving state of the simulation."""
 
@@ -28,20 +28,27 @@ def run_single_round(
     Now this step:
     - Selects a random issuer
     - Generates a contract location near the issuer within the unit square
+    - Selects participating firms based on the distance from the contract
     - logs the generated contract information in the state.
     
     Later the function will also:
-    - Compute participating firms
     - Decide if firms collude or compete
     - Update memory and interaction counts
     """
     contract = generate_contract_near_issuer(state.issuers_df, rng)
+    participation = select_participating_firms(
+        state.firms_df, 
+        contract_x = contract["contract_x"], 
+        contract_y = contract["contract_y"]
+    )
     state.round_log.append(
         {
             "round_number": round_number,
             "issuer_id": contract["issuer_id"],
             "contract_x": contract["contract_x"],
             "contract_y": contract["contract_y"],
+            "participating_firms": participation["participating_firms"], 
+            "radius_used": participation["radius_used"]
         }
     )
     
