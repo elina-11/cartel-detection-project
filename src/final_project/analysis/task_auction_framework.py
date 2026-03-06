@@ -18,6 +18,9 @@ def task_run_auction_simulation(
     depends_on: dict[str, Path] = {
         "auction_framework": SRC / "analysis" / "auction_framework.py",
         "create_firms_and_issuers": SRC / "analysis" / "create_firms_and_issuers.py",
+        "contract_generation" : SRC / "analysis" / "contract_generation.py", 
+        "participation" : SRC / "analysis" / "participation.py"
+
     },
     produces: Path = BLD / "data" / "simulation_state.pickle",
 ) -> None:
