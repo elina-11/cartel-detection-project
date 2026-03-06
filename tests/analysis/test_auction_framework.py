@@ -39,7 +39,7 @@ def test_simulation_state_initialization(
     firms_df: pd.DataFrame,
     issuers_df: pd.DataFrame,
 ) -> None:
-    # Checks if firms and issuers are stored correctly
+    
     pd.testing.assert_frame_equal(state.firms_df, firms_df)
     pd.testing.assert_frame_equal(state.issuers_df, issuers_df)
 
@@ -55,11 +55,27 @@ def test_simulation_state_initialization(
     assert state.round_log == []
 
 
-def test_run_single_round_placeholder(state: SimulationState) -> None:
+def test_run_single_round_logs_information(state: SimulationState) -> None:
     rng = np.random.default_rng(seed=SIMULATION_SEED)
 
-    # Since it's a placeholder, it should just not fail
     run_single_round(round_number=1, state=state, rng=rng)
+
+    assert len(state.round_log) == 1
+
+    log_entry = state.round_log[0]
+
+    expected_keys = {
+        "round_number", 
+        "issuer_id",
+        "contract_x", 
+        "contract_y", 
+        "participating_firms", 
+        "radius_used",
+    }
+
+    assert set(log_entry.keys()) == expected_keys
+    assert isinstance(log_entry["participating_firms"], list)
+    assert log_entry["radius_used"] >= 0.1
 
 
 def test_run_simulation_runs(state: SimulationState) -> None:
@@ -69,9 +85,19 @@ def test_run_simulation_runs(state: SimulationState) -> None:
     # It should return a SimulationState object
     assert isinstance(updated_state, SimulationState)
 
-    # Round log should still be empty (placeholder)
-    assert updated_state.round_log == []
+    # After 3 rounds we should have 3 log entries
+    assert len(updated_state.round_log) == 3
 
-    # Memory and interaction counts still empty (placeholder)
+    for entry in updated_state.round_log:
+        assert set(entry.keys()) == {
+            "round_number", 
+            "issuer_id", 
+            "contract_x", 
+            "contract_y", 
+            "participating_firms", 
+            "radius_used",
+        }
+
+    # Memory and interaction counts still empty since not yet implemented(placeholder)
     assert updated_state.interaction_memory == {}
     assert updated_state.interaction_count == {}
