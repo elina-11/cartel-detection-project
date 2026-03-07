@@ -15,17 +15,25 @@ N_ROUNDS: int = 3
 
 
 def task_run_auction_simulation(
-    depends_on: dict[str, Path] = {
-        "auction_framework": SRC / "analysis" / "auction_framework.py",
-        "create_firms_and_issuers": SRC / "analysis" / "create_firms_and_issuers.py",
-        "contract_generation": SRC / "analysis" / "contract_generation.py",
-        "participation": SRC / "analysis" / "participation.py",
-    },
+    depends_on: dict[str, Path] | None = None,
     produces: Path = BLD / "data" / "simulation_state.pickle",
 ) -> None:
-    """The function initializes the simulation state with firms and issuers,
+    """The function runs the auction simulation and save the resulting state.
+
+    It initializes the simulation state with firms and issuers,
     runs a few rounds of the auction framework, and saves the state.
     """
+    if depends_on is None:
+        depends_on = {
+            "auction_framework": SRC / "analysis" / "auction_framework.py",
+            "create_firms_and_issuers": SRC
+            / "analysis"
+            / "create_firms_and_issuers.py",
+            "contract_generation": SRC / "analysis" / "contract_generation.py",
+            "participation": SRC / "analysis" / "participation.py",
+            "decision_metrics": SRC / "analysis" / "decision_metrics.py",
+        }
+
     # Generating firms and issuers
     firms_df = create_firms(n_firms=N_FIRMS, seed=FIRMS_SEED)
     issuers_df = create_issuers(n_issuers=N_ISSUERS, seed=ISSUERS_SEED)
