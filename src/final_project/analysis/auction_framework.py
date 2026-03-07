@@ -18,7 +18,7 @@ class SimulationState:
         self.firms_df = firms_df
         self.issuers_df = issuers_df
         self.interaction_memory: dict[
-            tuple[int, int], list[str]
+            tuple[int, int], str
         ] = {}  # Memory of past interactions: {(firm_i, firm_j): [decisions]}
         self.interaction_count: dict[
             tuple[int, int], int
@@ -62,7 +62,7 @@ def run_single_round(
         frequency_metrics[firm] = _compute_frequency_metric(
             focal_firm=firm,
             participating_firms=participating_firms,
-            interaction_memory=state.interaction_memory,
+            round_log=state.round_log,
         )
 
     state.round_log.append(
@@ -71,7 +71,7 @@ def run_single_round(
             "issuer_id": contract["issuer_id"],
             "contract_x": contract["contract_x"],
             "contract_y": contract["contract_y"],
-            "participating_firms": participation["participating_firms"],
+            "participating_firms": participating_firms,
             "radius_used": participation["radius_used"],
             "memory_metrics": memory_metrics,
             "frequency_metrics": frequency_metrics,
