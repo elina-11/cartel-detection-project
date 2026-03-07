@@ -3,11 +3,8 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from final_project.analysis.auction_decisions import decide_actions_for_auction
 from final_project.analysis.contract_generation import generate_contract_near_issuer
-from final_project.analysis.decision_metrics import (
-    _compute_frequency_metric,
-    _compute_memory_metric,
-)
 from final_project.analysis.firm_participation import select_participating_firms
 
 
@@ -17,13 +14,9 @@ class SimulationState:
     def __init__(self, firms_df: pd.DataFrame, issuers_df: pd.DataFrame):
         self.firms_df = firms_df
         self.issuers_df = issuers_df
-        self.interaction_memory: dict[
-            tuple[int, int], str
-        ] = {}  # Memory of past interactions: {(firm_i, firm_j): [decisions]}
-        self.interaction_count: dict[
-            tuple[int, int], int
-        ] = {}  # Count of interactions between firms
-        self.round_log: list[dict[str, Any]] = []  # Log of all rounds
+        self.interaction_memory: dict[tuple[int, int], str] = {}
+        self.interaction_count: dict[tuple[int, int], int] = {}
+        self.round_log: list[dict[str, Any]] = []
 
 
 def run_single_round(
@@ -37,9 +30,10 @@ def run_single_round(
     - Selects participating firms based on the distance from the contract
     - Computes memory and frequency metrics for participating firms
     - logs the generated contract information in the state.
+    - Decides if firms collude or compete
 
     Later the function will also:
-    - Decide if firms collude or compete
+
     - Update memory and interaction counts
     """
     contract = generate_contract_near_issuer(state.issuers_df, rng)
@@ -50,20 +44,12 @@ def run_single_round(
     )
     participating_firms = participation["participating_firms"]
 
-    memory_metrics = {}
-    frequency_metrics = {}
-
-    for firm in participating_firms:
-        memory_metrics[firm] = _compute_memory_metric(
-            focal_firm=firm,
-            participating_firms=participating_firms,
-            interaction_memory=state.interaction_memory,
-        )
-        frequency_metrics[firm] = _compute_frequency_metric(
-            focal_firm=firm,
-            participating_firms=participating_firms,
-            round_log=state.round_log,
-        )
+    actions = decide_actions_for_auction(
+        participating_firms=participating_firms,
+        interaction_memory=state.interaction_memory,
+        round_log=state.round_log,
+        rng=rng,
+    )
 
     state.round_log.append(
         {
@@ -73,8 +59,7 @@ def run_single_round(
             "contract_y": contract["contract_y"],
             "participating_firms": participating_firms,
             "radius_used": participation["radius_used"],
-            "memory_metrics": memory_metrics,
-            "frequency_metrics": frequency_metrics,
+            "actions": actions,
         }
     )
 
