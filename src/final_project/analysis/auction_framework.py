@@ -4,7 +4,13 @@ import numpy as np
 import pandas as pd
 
 from final_project.analysis.contract_generation import generate_contract_near_issuer
+from final_project.analysis.decision_metrics import (
+    _compute_frequency_metric,
+    _compute_memory_metric,
+)
 from final_project.analysis.firm_participation import select_participating_firms
+
+
 class SimulationState:
     """Stores the evolving state of the simulation."""
 
@@ -29,33 +35,54 @@ def run_single_round(
     - Selects a random issuer
     - Generates a contract location near the issuer within the unit square
     - Selects participating firms based on the distance from the contract
+    - Computes memory and frequency metrics for participating firms
     - logs the generated contract information in the state.
-    
+
     Later the function will also:
     - Decide if firms collude or compete
     - Update memory and interaction counts
     """
     contract = generate_contract_near_issuer(state.issuers_df, rng)
     participation = select_participating_firms(
-        state.firms_df, 
-        contract_x = contract["contract_x"], 
-        contract_y = contract["contract_y"]
+        state.firms_df,
+        contract_x=contract["contract_x"],
+        contract_y=contract["contract_y"],
     )
+    participating_firms = participation["participating_firms"]
+
+    memory_metrics = {}
+    frequency_metrics = {}
+
+    for firm in participating_firms:
+        memory_metrics[firm] = _compute_memory_metric(
+            focal_firm=firm,
+            participating_firms=participating_firms,
+            interaction_memory=state.interaction_memory,
+        )
+        frequency_metrics[firm] = _compute_frequency_metric(
+            focal_firm=firm,
+            participating_firms=participating_firms,
+            interaction_memory=state.interaction_memory,
+        )
+
     state.round_log.append(
         {
             "round_number": round_number,
             "issuer_id": contract["issuer_id"],
             "contract_x": contract["contract_x"],
             "contract_y": contract["contract_y"],
-            "participating_firms": participation["participating_firms"], 
-            "radius_used": participation["radius_used"]
+            "participating_firms": participation["participating_firms"],
+            "radius_used": participation["radius_used"],
+            "memory_metrics": memory_metrics,
+            "frequency_metrics": frequency_metrics,
         }
     )
-    
+
+
 def run_simulation(
     n_rounds: int, state: SimulationState, seed: int = 42
 ) -> SimulationState:
-    """Run the auction simulation for n_rounds.
+    """This function runs the auction simulation for n_rounds.
 
     Args:
         n_rounds (int) : Number of auction rounds to simulate.
