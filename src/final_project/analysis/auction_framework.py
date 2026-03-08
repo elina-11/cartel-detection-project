@@ -3,7 +3,10 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from final_project.analysis.auction_decisions import decide_actions_for_auction
+from final_project.analysis.auction_decisions import (
+    collusion_success,
+    decide_actions_for_auction,
+)
 from final_project.analysis.contract_generation import generate_contract_near_issuer
 from final_project.analysis.firm_participation import select_participating_firms
 
@@ -51,6 +54,8 @@ def run_single_round(
         rng=rng,
     )
 
+    collusion_outcome = collusion_success(actions)
+
     state.round_log.append(
         {
             "round_number": round_number,
@@ -60,6 +65,7 @@ def run_single_round(
             "participating_firms": participating_firms,
             "radius_used": participation["radius_used"],
             "actions": actions,
+            "collusion_success": collusion_outcome,
         }
     )
 

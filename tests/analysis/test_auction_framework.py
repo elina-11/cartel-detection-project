@@ -73,11 +73,14 @@ def test_run_single_round_logs_information(state: SimulationState) -> None:
         "participating_firms",
         "radius_used",
         "actions",
+        "collusion_success",
     }
 
     assert set(log_entry.keys()) == expected_keys
     assert isinstance(log_entry["participating_firms"], list)
     assert log_entry["radius_used"] >= MIN_RADIUS
+    assert isinstance(log_entry["actions"], dict)
+    assert isinstance(log_entry["collusion_success"], bool)
 
     for firm in log_entry["participating_firms"]:
         assert firm in log_entry["actions"]
@@ -100,8 +103,11 @@ def test_run_simulation_runs(state: SimulationState) -> None:
             "participating_firms",
             "radius_used",
             "actions",
+            "collusion_success",
         }
         assert isinstance(entry["participating_firms"], list)
+        assert isinstance(entry["actions"], dict)
+        assert isinstance(entry["collusion_success"], bool)
 
         for firm in entry["participating_firms"]:
             assert firm in entry["actions"]
