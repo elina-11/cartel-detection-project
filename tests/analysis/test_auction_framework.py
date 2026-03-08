@@ -86,6 +86,10 @@ def test_run_single_round_logs_information(state: SimulationState) -> None:
         assert firm in log_entry["actions"]
         assert log_entry["actions"][firm] in {"collude", "compete"}
 
+    if len(log_entry["participating_firms"]) > 1:
+        assert state.interaction_memory != {}
+        assert state.interaction_count != {}
+
 
 def test_run_simulation_runs(state: SimulationState) -> None:
     updated_state = run_simulation(n_rounds=N_ROUNDS, state=state, seed=SIMULATION_SEED)
@@ -113,6 +117,7 @@ def test_run_simulation_runs(state: SimulationState) -> None:
             assert firm in entry["actions"]
             assert entry["actions"][firm] in {"collude", "compete"}
 
-    # Memory and interaction counts still empty since not yet implemented(placeholder)
-    assert updated_state.interaction_memory == {}
-    assert updated_state.interaction_count == {}
+    # Memory and interaction counts should not be empty anymore
+    if any(len(entry["participating_firms"]) > 1 for entry in updated_state.round_log):
+        assert updated_state.interaction_memory != {}
+        assert updated_state.interaction_count != {}
