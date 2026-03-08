@@ -11,7 +11,7 @@ def decide_actions_for_auction(
     round_log: list[dict[str, Any]],
     rng: np.random.Generator,
 ) -> dict[int, str]:
-    """Determine decisions for all firms in the current auction.
+    """This function determines decisions for all firms in the current auction.
 
     The function loops over participating firms and determines whether each
     firm chooses to collude or compete.
@@ -38,3 +38,17 @@ def decide_actions_for_auction(
         )
 
     return actions
+
+
+def collusion_success(actions: dict[int, str]) -> bool:
+    """This function determines whether collusion succeeded in the auction.
+
+    Collusion is successful only if all the participation firms collude.
+
+    Args:
+        actions (dict[int], str]): Mapping of firm_id to decision.
+
+    Returns:
+        bool: True if all firms collude, False otherwise.
+    """
+    return all(action == "collude" for action in actions.values())
