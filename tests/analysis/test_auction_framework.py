@@ -72,31 +72,23 @@ def test_run_single_round_logs_information(state: SimulationState) -> None:
         "contract_y",
         "participating_firms",
         "radius_used",
-        "memory_metrics",
-        "frequency_metrics",
+        "actions",
     }
 
     assert set(log_entry.keys()) == expected_keys
     assert isinstance(log_entry["participating_firms"], list)
     assert log_entry["radius_used"] >= MIN_RADIUS
-    assert isinstance(log_entry["memory_metrics"], dict)
-    assert isinstance(log_entry["frequency_metrics"], dict)
 
     for firm in log_entry["participating_firms"]:
-        assert firm in log_entry["memory_metrics"]
-        assert firm in log_entry["frequency_metrics"]
-        assert 0.0 <= log_entry["memory_metrics"][firm] <= 1.0
-        assert log_entry["frequency_metrics"][firm] in {0, 1}
+        assert firm in log_entry["actions"]
+        assert log_entry["actions"][firm] in {"collude", "compete"}
 
 
 def test_run_simulation_runs(state: SimulationState) -> None:
-    # Run for 3 rounds to test
-    updated_state = run_simulation(n_rounds=3, state=state, seed=SIMULATION_SEED)
+    updated_state = run_simulation(n_rounds=N_ROUNDS, state=state, seed=SIMULATION_SEED)
 
-    # It should return a SimulationState object
     assert isinstance(updated_state, SimulationState)
 
-    # After 3 rounds we should have 3 log entries
     assert len(updated_state.round_log) == N_ROUNDS
 
     for entry in updated_state.round_log:
@@ -107,18 +99,13 @@ def test_run_simulation_runs(state: SimulationState) -> None:
             "contract_y",
             "participating_firms",
             "radius_used",
-            "memory_metrics",
-            "frequency_metrics",
+            "actions",
         }
         assert isinstance(entry["participating_firms"], list)
-        assert isinstance(entry["memory_metrics"], dict)
-        assert isinstance(entry["frequency_metrics"], dict)
 
         for firm in entry["participating_firms"]:
-            assert firm in entry["memory_metrics"]
-            assert firm in entry["frequency_metrics"]
-            assert 0.0 <= entry["memory_metrics"][firm] <= 1.0
-            assert entry["frequency_metrics"][firm] in {0, 1}
+            assert firm in entry["actions"]
+            assert entry["actions"][firm] in {"collude", "compete"}
 
     # Memory and interaction counts still empty since not yet implemented(placeholder)
     assert updated_state.interaction_memory == {}
