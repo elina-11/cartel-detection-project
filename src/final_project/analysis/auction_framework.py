@@ -9,6 +9,10 @@ from final_project.analysis.auction_decisions import (
 )
 from final_project.analysis.contract_generation import generate_contract_near_issuer
 from final_project.analysis.firm_participation import select_participating_firms
+from final_project.analysis.interaction_updates import (
+    _update_interaction_counts,
+    _update_interaction_memory,
+)
 
 
 class SimulationState:
@@ -33,11 +37,8 @@ def run_single_round(
     - Selects participating firms based on the distance from the contract
     - Computes memory and frequency metrics for participating firms
     - logs the generated contract information in the state.
-    - Decides if firms collude or compete
-
-    Later the function will also:
-
-    - Update memory and interaction counts
+    - Decides if firms collude or competes
+    - Updates memory and interaction counts
     """
     contract = generate_contract_near_issuer(state.issuers_df, rng)
     participation = select_participating_firms(
@@ -55,6 +56,16 @@ def run_single_round(
     )
 
     collusion_outcome = collusion_success(actions)
+    _update_interaction_memory(
+        participating_firms=participating_firms,
+        actions=actions,
+        interaction_memory=state.interaction_memory,
+    )
+
+    _update_interaction_counts(
+        participating_firms=participating_firms,
+        interaction_count=state.interaction_count,
+    )
 
     state.round_log.append(
         {
