@@ -82,21 +82,40 @@ def run_single_round(
 
 
 def run_simulation(
-    n_rounds: int, state: SimulationState, seed: int = 42
+    n_rounds: int,
+    state: SimulationState,
+    seed: int = 42,
+    burn_in_rounds: int = 0,
 ) -> SimulationState:
     """This function runs the auction simulation for n_rounds.
+
+    Firms are learning during the burn-in period.
+    After the simulation ends the first burn_in_round outcomes are
+    discarded from round log.
 
     Args:
         n_rounds (int) : Number of auction rounds to simulate.
         state (SimulationState) : Object storing the evolving state of the simulation.
         seed (int) : Random seed for reproducibility.
+        burn_in_rounds (int) : Number of initial rounds to discard from
+        recorded outcomes after simulation completes.
 
     Returns:
         SimulationState : Updated state after running all rounds.
     """
+    if burn_in_rounds < 0:
+        msg = "burn_in_rounds must be non-negative."
+        raise ValueError(msg)
+    if burn_in_rounds > n_rounds:
+        msg = "burn_in_rounds cannot exceed n_rounds."
+        raise ValueError(msg)
+
     rng = np.random.default_rng(seed)
 
     for round_number in range(1, n_rounds + 1):
         run_single_round(round_number, state, rng)
+
+    if burn_in_rounds > 0:
+        state.round_log = state.round_log[burn_in_rounds:]
 
     return state

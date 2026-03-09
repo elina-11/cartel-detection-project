@@ -11,7 +11,8 @@ N_ISSUERS: int = 75
 FIRMS_SEED: int = 42
 ISSUERS_SEED: int = 24
 SIMULATION_SEED: int = 246
-N_ROUNDS: int = 3
+N_ROUNDS: int = 2000
+BURN_IN_ROUNDS: int = 1000
 
 
 def task_run_auction_simulation(
@@ -45,6 +46,7 @@ def task_run_auction_simulation(
         n_rounds=N_ROUNDS,
         state=state,
         seed=SIMULATION_SEED,
+        burn_in_rounds=BURN_IN_ROUNDS,
     )
 
     produces.parent.mkdir(parents=True, exist_ok=True)
