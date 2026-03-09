@@ -164,7 +164,7 @@ def test_run_simulation_applies_burn_in(state: SimulationState) -> None:
     ("n_rounds", "burn_in_rounds", "error_message"),
     [
         (3, -1, "burn_in_rounds must be non-negative"),
-        (3, 4, "burn-in-rounds cannot exceed n_rounds."),
+        (3, 4, "burn_in_rounds cannot exceed n_rounds."),
     ],
 )
 def test_run_simulation_invalid_burn_in_raises_error(
