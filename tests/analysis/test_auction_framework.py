@@ -91,7 +91,7 @@ def test_run_single_round_logs_information(state: SimulationState) -> None:
         assert state.interaction_count != {}
 
 
-def test_run_simulation_runs(state: SimulationState) -> None:
+def test_run_simulation_runs_without_burn_in(state: SimulationState) -> None:
     updated_state = run_simulation(n_rounds=N_ROUNDS, state=state, seed=SIMULATION_SEED)
 
     assert isinstance(updated_state, SimulationState)
@@ -121,3 +121,62 @@ def test_run_simulation_runs(state: SimulationState) -> None:
     if any(len(entry["participating_firms"]) > 1 for entry in updated_state.round_log):
         assert updated_state.interaction_memory != {}
         assert updated_state.interaction_count != {}
+
+
+def test_run_simulation_applies_burn_in(state: SimulationState) -> None:
+    n_rounds = 6
+    burn_in_rounds = 2
+
+    updated_state = run_simulation(
+        n_rounds=n_rounds,
+        state=state,
+        seed=SIMULATION_SEED,
+        burn_in_rounds=burn_in_rounds,
+    )
+
+    assert isinstance(updated_state, SimulationState)
+    assert len(updated_state.round_log) == n_rounds - burn_in_rounds
+
+    expected_round_numbers = list(range(burn_in_rounds + 1, n_rounds + 1))
+    observed_round_numbers = [
+        entry["round_number"] for entry in updated_state.round_log
+    ]
+
+    assert observed_round_numbers == expected_round_numbers
+
+    for entry in updated_state.round_log:
+        assert set(entry.keys()) == {
+            "round_number",
+            "issuer_id",
+            "contract_x",
+            "contract_y",
+            "participating_firms",
+            "radius_used",
+            "actions",
+            "collusion_success",
+        }
+        assert isinstance(entry["participating_firms"], list)
+        assert isinstance(entry["actions"], dict)
+        assert isinstance(entry["collusion_success"], bool)
+
+
+@pytest.mark.parametrize(
+    ("n_rounds", "burn_in_rounds", "error_message"),
+    [
+        (3, -1, "burn_in_rounds must be non-negative"),
+        (3, 4, "burn-in-rounds cannot exceed n_rounds."),
+    ],
+)
+def test_run_simulation_invalid_burn_in_raises_error(
+    state: SimulationState,
+    n_rounds: int,
+    burn_in_rounds: int,
+    error_message: str,
+) -> None:
+    with pytest.raises(ValueError, match=error_message):
+        run_simulation(
+            n_rounds=n_rounds,
+            state=state,
+            seed=SIMULATION_SEED,
+            burn_in_rounds=burn_in_rounds,
+        )
