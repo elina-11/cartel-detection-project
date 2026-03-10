@@ -291,3 +291,23 @@ def _detect_groups_from_all_seeds(
         detected_groups.append(group)
 
     return detected_groups
+
+
+def _deduplicate_groups(
+    groups: list[set[int]],
+) -> list[set[int]]:
+    """Helper function removes duplicate and singleton groups.
+
+    Args:
+        groups (list[set[int]]): Raw list of detected groups.
+
+    Returns:
+        list[set[int]]: List of unique groups with size greater than 1.
+    """
+    unique_groups: set[frozenset[int]] = set()
+
+    for group in groups:
+        if len(group) > 1:
+            unique_groups.add(frozenset(group))
+
+    return [set(group) for group in unique_groups]
