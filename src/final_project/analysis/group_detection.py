@@ -77,3 +77,63 @@ def _compute_internal_strength(
                 internal_strength += weight
 
     return internal_strength
+
+
+def _compute_external_strength(
+    group: set[int],
+    adjacency: dict[int, dict[int, float]],
+) -> float:
+    """Helper function computes the external strength of a candidate group.
+
+    External strength is the sum of weights of all edges that connect a node
+    inside the group to a node outside the group.
+
+    Args:
+        group (set[int]): Set of firm IDs in the candidate group.
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+
+    Returns:
+        float: External strength of the group.
+    """
+    external_strength = 0.0
+
+    for node in group:
+        for neighbor, weight in adjacency.get(node, {}).items():
+            if neighbor not in group:
+                external_strength += weight
+
+    return external_strength
+
+
+def _compute_group_fitness(
+    group: set[int],
+    adjacency: dict[int, dict[int, float]],
+    alpha: float = 1.5,
+    beta: float = 1.5,
+) -> float:
+    """Helper function computes the fitness of a candidate group.
+
+    The fitness function rewards groups with strong internal ties, weak
+    external ties, and relatively small size.
+
+    Args:
+        group (set[int]): Set of firm IDs in the candidate group.
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+        alpha (float): Exponent controlling the penalty on total strength.
+        beta (float): Exponent controlling the penalty on group size.
+
+    Returns:
+        float: Fitness value of the candidate group.
+    """
+    internal_strength = _compute_internal_strength(group, adjacency)
+    external_strength = _compute_external_strength(group, adjacency)
+    group_size = len(group)
+
+    total_strength = internal_strength + external_strength
+
+    if total_strength == 0.0:
+        return 0.0
+
+    return internal_strength / ((total_strength**alpha) * (group_size**beta))
