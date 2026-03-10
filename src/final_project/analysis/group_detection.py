@@ -137,3 +137,73 @@ def _compute_group_fitness(
         return 0.0
 
     return internal_strength / ((total_strength**alpha) * (group_size**beta))
+
+
+def _get_candidate_neighbors(
+    group: set[int],
+    adjacency: dict[int, dict[int, float]],
+) -> set[int]:
+    """Helper function gets all candidate neighbors of a candidate group.
+
+    A candidate neighbor is a node that is adjacent to at least one member
+    of the group but is not already inside the group.
+
+    Args:
+        group (set[int]): Set of firm IDs in the candidate group.
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+
+    Returns:
+        set[int]: Set of candidate nodes that could be added to the group.
+    """
+    candidate_neighbors: set[int] = set()
+
+    for node in group:
+        for neighbor in adjacency.get(node, {}):
+            if neighbor not in group:
+                candidate_neighbors.add(neighbor)
+
+    return candidate_neighbors
+
+
+def _compute_node_fitness_gain(
+    group: set[int],
+    candidate_node: int,
+    adjacency: dict[int, dict[int, float]],
+    alpha: float = 1.5,
+    beta: float = 1.5,
+) -> float:
+    """Helper computes the fitness gain from adding one node to a candidate group.
+
+    The gain is the difference between the fitness of the expanded group
+    and the fitness of the current group.
+
+    Args:
+        group (set[int]): Current candidate group.
+        candidate_node (int): Node being considered for addition.
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+        alpha (float): Exponent controlling the penalty on total strength.
+        beta (float): Exponent controlling the penalty on group size.
+
+    Returns:
+        float: Fitness gain from adding the candidate node.
+    """
+    current_fitness = _compute_group_fitness(
+        group=group,
+        adjacency=adjacency,
+        alpha=alpha,
+        beta=beta,
+    )
+
+    expanded_group = set(group)
+    expanded_group.add(candidate_node)
+
+    expanded_fitness = _compute_group_fitness(
+        group=expanded_group,
+        adjacency=adjacency,
+        alpha=alpha,
+        beta=beta,
+    )
+
+    return expanded_fitness - current_fitness
