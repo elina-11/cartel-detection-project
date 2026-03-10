@@ -207,3 +207,54 @@ def _compute_node_fitness_gain(
     )
 
     return expanded_fitness - current_fitness
+
+
+def _expand_group_from_seed(
+    seed_node: int,
+    adjacency: dict[int, dict[int, float]],
+    alpha: float = 1.5,
+    beta: float = 1.5,
+) -> set[int]:
+    """Helper function expands a group greedily starting from a seed node.
+
+    The group grows by repeatedly adding the neighboring node that gives
+    the largest positive improvement in group fitness. Expansion stops when
+    no candidate node increases the fitness.
+
+    Args:
+        seed_node (int): Starting node for the group.
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+        alpha (float): Fitness parameter controlling strength penalty.
+        beta (float): Fitness parameter controlling size penalty.
+
+    Returns:
+        set[int]: Final group grown from the seed node.
+    """
+    group: set[int] = {seed_node}
+
+    while True:
+        candidate_neighbors = _get_candidate_neighbors(group, adjacency)
+
+        best_candidate = None
+        best_gain = 0.0
+
+        for candidate in candidate_neighbors:
+            gain = _compute_node_fitness_gain(
+                group=group,
+                candidate_node=candidate,
+                adjacency=adjacency,
+                alpha=alpha,
+                beta=beta,
+            )
+
+            if gain > best_gain:
+                best_gain = gain
+                best_candidate = candidate
+
+        if best_candidate is None:
+            break
+
+        group.add(best_candidate)
+
+    return group
