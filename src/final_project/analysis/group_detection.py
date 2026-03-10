@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 import pandas as pd
 
 
@@ -24,3 +26,27 @@ def _validate_co_bidding_network(network_df: pd.DataFrame) -> None:
             "'firm_id_1', 'firm_id_2', and 'weight'."
         )
         raise ValueError(msg)
+
+
+def _build_adjacency_dict(network_df: pd.DataFrame) -> dict[int, dict[int, float]]:
+    """Helper function converts the co-bidding edge list into an adjacency dictionary.
+
+    Args:
+        network_df (pd.DataFrame): Edge list with columns
+            ['firm_id_1', 'firm_id_2', 'weight'].
+
+    Returns:
+        dict[int, dict[int, float]]: Mapping from each firm to its neighbors
+        and the corresponding edge weights.
+    """
+    adjacency: dict[int, dict[int, float]] = defaultdict(dict)
+
+    for row in network_df.itertuples(index=False):
+        firm_id_1 = int(row.firm_id_1)
+        firm_id_2 = int(row.firm_id_2)
+        weight = float(row.weight)
+
+        adjacency[firm_id_1][firm_id_2] = weight
+        adjacency[firm_id_2][firm_id_1] = weight
+
+    return dict(adjacency)
