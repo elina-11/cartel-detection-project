@@ -50,3 +50,30 @@ def _build_adjacency_dict(network_df: pd.DataFrame) -> dict[int, dict[int, float
         adjacency[firm_id_2][firm_id_1] = weight
 
     return dict(adjacency)
+
+
+def _compute_internal_strength(
+    group: set[int],
+    adjacency: dict[int, dict[int, float]],
+) -> float:
+    """Helper function computes the internal strength of a candidate group.
+
+    Internal strength is the sum of weights of all edges where both
+    endpoints are inside the group.
+
+    Args:
+        group (set[int]): Set of firm IDs in the candidate group.
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+
+    Returns:
+        float: Internal strength of the group.
+    """
+    internal_strength = 0.0
+
+    for node in group:
+        for neighbor, weight in adjacency.get(node, {}).items():
+            if neighbor in group and neighbor > node:
+                internal_strength += weight
+
+    return internal_strength
