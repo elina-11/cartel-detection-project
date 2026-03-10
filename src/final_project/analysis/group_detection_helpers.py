@@ -265,7 +265,7 @@ def _detect_groups_from_all_seeds(
     alpha: float = 1.5,
     beta: float = 1.5,
 ) -> list[set[int]]:
-    """Helpwr function detects candidate groups by expanding from every seed node.
+    """Helper function detects candidate groups by expanding from every seed node.
 
     This function runs the greedy group expansion algorithm once for each
     node in the network and collects the resulting groups.
