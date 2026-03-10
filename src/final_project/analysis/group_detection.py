@@ -258,3 +258,36 @@ def _expand_group_from_seed(
         group.add(best_candidate)
 
     return group
+
+
+def _detect_groups_from_all_seeds(
+    adjacency: dict[int, dict[int, float]],
+    alpha: float = 1.5,
+    beta: float = 1.5,
+) -> list[set[int]]:
+    """Helpwr function detects candidate groups by expanding from every seed node.
+
+    This function runs the greedy group expansion algorithm once for each
+    node in the network and collects the resulting groups.
+
+    Args:
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+        alpha (float): Fitness parameter controlling strength penalty.
+        beta (float): Fitness parameter controlling size penalty.
+
+    Returns:
+        list[set[int]]: List of detected groups, possibly containing duplicates.
+    """
+    detected_groups: list[set[int]] = []
+
+    for seed_node in adjacency:
+        group = _expand_group_from_seed(
+            seed_node=seed_node,
+            adjacency=adjacency,
+            alpha=alpha,
+            beta=beta,
+        )
+        detected_groups.append(group)
+
+    return detected_groups
