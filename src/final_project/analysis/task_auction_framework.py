@@ -31,7 +31,7 @@ def task_run_auction_simulation(
             / "analysis"
             / "create_firms_and_issuers.py",
             "contract_generation": SRC / "analysis" / "contract_generation.py",
-            "participation": SRC / "analysis" / "participation.py",
+            "participation": SRC / "analysis" / "firm_participation.py",
             "decision_metrics": SRC / "analysis" / "decision_metrics.py",
             "firm_decision": SRC / "analysis" / "firm_decision.py",
             "auction_decisions": SRC / "analysis" / "auction_decisions.py",
