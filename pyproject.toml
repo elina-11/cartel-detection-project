@@ -93,6 +93,7 @@ ty = "*"
 networkx = "*"
 matplotlib = "*"
 scipy = "*"
+seaborn = ">=0.13"
 
 [tool.pixi.pypi-dependencies]
 final_project = { path = ".", editable = true }

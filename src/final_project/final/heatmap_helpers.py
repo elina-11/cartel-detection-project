@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def _validate_group_features(df: pd.DataFrame) -> None:
-    """Helper function validates group features DataFrame."""
+    """Validate the structure of the group features DataFrame."""
     required_columns = {"group_id", "coherence", "exclusivity"}
 
     if set(df.columns) != required_columns:
@@ -20,19 +20,19 @@ def _compute_heatmap_counts(
     group_features: pd.DataFrame,
     bins: int = 10,
 ) -> pd.DataFrame:
-    """Helper function computes the 2D bin counts for the heatmap.
+    """Compute the 2D bin counts for the heatmap.
 
     Args:
         group_features (pd.DataFrame): Group features table.
         bins (int): Number of bins for coherence and exclusivity.
 
     Returns:
-        pd.DataFrame: Pivot table suitable for heatmap plotting.
+        pd.DataFrame: Matrix suitable for seaborn heatmap plotting.
     """
     _validate_group_features(group_features)
 
-    coherence_bins = np.linspace(0, 1, bins + 1)
-    exclusivity_bins = np.linspace(0, 1, bins + 1)
+    coherence_bins = np.linspace(0.0, 1.0, bins + 1)
+    exclusivity_bins = np.linspace(0.0, 1.0, bins + 1)
 
     df = group_features.copy()
 
@@ -51,9 +51,17 @@ def _compute_heatmap_counts(
     )
 
     heatmap_counts = (
-        df.groupby(["coherence_bin", "exclusivity_bin"])
-        .size()
-        .pivit_table(fill_value=0)
+        df.groupby(["coherence_bin", "exclusivity_bin"]).size().unstack(fill_value=0)
     )
+
+    all_bins = range(bins)
+
+    heatmap_counts = heatmap_counts.reindex(
+        index=all_bins,
+        columns=all_bins,
+        fill_value=0,
+    )
+
+    heatmap_counts = heatmap_counts.sort_index(ascending=False)
 
     return heatmap_counts
