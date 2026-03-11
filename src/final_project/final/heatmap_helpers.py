@@ -5,36 +5,34 @@ import pandas as pd
 
 
 def _validate_group_features(df: pd.DataFrame) -> None:
-    """Validate the structure of the group features DataFrame."""
-    required_columns = {"group_id", "coherence", "exclusivity"}
+    """Helper function validates the group-level DataFrame for final figures."""
+    required_columns = {
+        "group_id",
+        "coherence",
+        "exclusivity",
+        "collusion_rate",
+        "simulation_id",
+    }
 
     if set(df.columns) != required_columns:
         msg = (
-            "group_features must contain exactly: "
-            "'group_id', 'coherence', 'exclusivity'."
+            "heatmap_data must contain exactly: 'group_id', 'coherence', "
+            "'exclusivity', 'collusion_rate', 'simulation_id'."
         )
         raise ValueError(msg)
 
 
-def _compute_heatmap_counts(
-    group_features: pd.DataFrame,
+def _bin_group_data(
+    group_data: pd.DataFrame,
     bins: int = 10,
 ) -> pd.DataFrame:
-    """Compute the 2D bin counts for the heatmap.
-
-    Args:
-        group_features (pd.DataFrame): Group features table.
-        bins (int): Number of bins for coherence and exclusivity.
-
-    Returns:
-        pd.DataFrame: Matrix suitable for seaborn heatmap plotting.
-    """
-    _validate_group_features(group_features)
+    """Helper function adds coherence and exclusivity bin columns."""
+    _validate_group_features(group_data)
 
     coherence_bins = np.linspace(0.0, 1.0, bins + 1)
     exclusivity_bins = np.linspace(0.0, 1.0, bins + 1)
 
-    df = group_features.copy()
+    df = group_data.copy()
 
     df["coherence_bin"] = pd.cut(
         df["coherence"],
@@ -50,6 +48,16 @@ def _compute_heatmap_counts(
         labels=False,
     )
 
+    return df
+
+
+def _compute_heatmap_counts(
+    group_data: pd.DataFrame,
+    bins: int = 10,
+) -> pd.DataFrame:
+    """Helper function computes 2D bin counts for Figure A."""
+    df = _bin_group_data(group_data, bins=bins)
+
     heatmap_counts = (
         df.groupby(["coherence_bin", "exclusivity_bin"]).size().unstack(fill_value=0)
     )
@@ -62,6 +70,28 @@ def _compute_heatmap_counts(
         fill_value=0,
     )
 
-    heatmap_counts = heatmap_counts.sort_index(ascending=False)
+    return heatmap_counts.sort_index(ascending=False)
 
-    return heatmap_counts
+
+def _compute_heatmap_collusion_rate(
+    group_data: pd.DataFrame,
+    bins: int = 10,
+) -> pd.DataFrame:
+    """Function computes average collusion rate in each 2D bin for Figure B."""
+    df = _bin_group_data(group_data, bins=bins)
+
+    heatmap_rates = (
+        df.groupby(["coherence_bin", "exclusivity_bin"])["collusion_rate"]
+        .mean()
+        .unstack(fill_value=0.0)
+    )
+
+    all_bins = range(bins)
+
+    heatmap_rates = heatmap_rates.reindex(
+        index=all_bins,
+        columns=all_bins,
+        fill_value=0.0,
+    )
+
+    return heatmap_rates.sort_index(ascending=False)

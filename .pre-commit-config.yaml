@@ -41,12 +41,12 @@ repos:
     rev: v1.38.0
     hooks:
       - id: yamllint
-        exclude: ^(docs_template/\.readthedocs.yaml)$
+      #  exclude: ^(docs_template/\.readthedocs.yaml)$
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.14
     hooks:
       - id: ruff-check
-        args: [--fix]
+        args: [--fix, --ignore=PD010]
         types_or: [jupyter, pyi, python]
       - id: ruff-format
         types_or: [jupyter, pyi, python]
@@ -71,7 +71,7 @@ repos:
         additional_dependencies: [mdformat-myst, mdformat-ruff]
         args: [--wrap, "88"]
         files: (docs_template/.|documents/.)
-        exclude: (documents/presentation.md)
+      #  exclude: (documents/presentation.md)
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
     hooks:

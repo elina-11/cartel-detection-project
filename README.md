@@ -1,79 +1,64 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/i9Zy4NKR)
-
 # Project Topic
 
 ## Objective:
 
-This project aims to detect potential collusion between firms in procurement markets by
-analyzing patterns in historical price or bid data.
+This project aims to detect potential collusion between firms in procurement markets.
 
 ## Data:
 
 The analysis uses synthetic auction data simulating multiple firms across repeated
-auctions, with optional application to publicly available procurement datasets for
-real-world validation.
+auctions.
 
 ## Method:
 
 A network-based approach is implemented, where firms are represented as nodes and
 co-bidding behavior as weighted edges, and collusion likelihood is quantified using
-metrics such as network cohesion and exclusivity, complemented by visualizations of
+metrics such as network coherence and exclusivity, complemented by visualizations of
 suspicious firm interactions.
 
-# Econ Project Templates: Modern, Reproducible Research in Economics
+## Project Structure:
 
-![MIT license](https://img.shields.io/github/license/OpenSourceEconomics/econ-project-templates)
-[![Documentation Status](https://readthedocs.org/projects/econ-project-templates/badge/?version=stable)](https://econ-project-templates.readthedocs.io/en/stable/)
-[![image](https://github.com/iame-uni-bonn/final-project-elina-11.git/actions/workflows/main.yml/badge.svg)](https://github.com/iame-uni-bonn/final-project-elina-11.git/actions/workflows/main.yml)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/OpenSourceEconomics/econ-project-templates/main.svg)](https://results.pre-commit.ci/latest/github/OpenSourceEconomics/econ-project-templates/main)
+- `src/` Contains the code and the task files that define the individual steps of the
+  workflow.
 
-This project provides a "batteries-included" template for economists to produce fully
-reproducible research. It replaces fragile, manual workflows with a robust, automated
-pipeline.
+- `bld/` Contains all generated outputs, including simulated datasets and the final
+  plots. This ensures that results are reproducible and automatically regenerated when
+  tasks are rerun.
 
-## Why Reproducibility?
+- `pyproject.toml` Defines the reproducile environment with all required dependencies.
 
-Reproducibility is about **your peace of mind**. It means knowing that if you find a
-mistake in your raw data three days before submission, you can re-run your entire
-project—tables, figures, and paper—with a single command. It means your future self (and
-your co-authors) can understand and run your code on a new machine without spending a
-week fighting dependency hell.
+- `config.py` Stores parameters and settings that are used across multiple tasks to
+  avoid duplication and make project easier to maintain.
 
-## Quick Start (The "Magic" Moment)
+- `README.md` Documentation of the project. Also read "ProjectProcedure.md" for more
+  in-depth documentation of procedure.
 
-Experience the reproducibility of this template in less than five minutes:
+The workflow is executed using `pytask`, which automatically runs all tasks in the
+correct order based on their dependencies.
 
-1. **Install [Pixi](https://pixi.sh/)** (our only prerequisite).
-1. **Clone this repository**.
-1. **Run and view the results**:
+## Usage
 
-```bash
-# View the research paper in your browser
-pixi run view-paper
+### Prerequisites
 
-# View the presentation slides
-pixi run view-pres
+You need to have `pixi` installed on your system.
+
+### Running the Project
+
+1. **Install dependencies:**
+
+```console
+pixi install
 ```
 
-These commands automatically handle environment setup, data cleaning, analysis, and
-launching the output servers.
+2. **Run the full workflow:**
 
-## Documentation
+```console
+pixi run pytask
+```
 
-Full documentation is available at
-[econ-project-templates.readthedocs.io](https://econ-project-templates.readthedocs.io/).
+This executes all tasks and generates intermediate results and final outputs as needed.
 
-## Contributing
+### Viewing Results
 
-We welcome suggestions on anything from improving the documentation to reporting bugs
-and requesting new features. Please open an
-[issue](https://github.com/iame-uni-bonn/final-project-elina-11.git/issues) in these
-cases.
-
-### Contributors
-
-@hmgaudecker @timmens
-
-### Former Contributor and Creator of pytask
-
-@tobiasraabe
+- The final figures are generated and saved in: bld/figures/
+- The datasets used for generating the figures are stored in the bld directory.
