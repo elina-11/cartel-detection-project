@@ -5,6 +5,7 @@ from math import prod
 import pandas as pd
 
 from final_project.analysis.group_detection_helpers import (
+    _build_adjacency_dict,
     _compute_external_strength,
     _compute_internal_strength,
     _validate_co_bidding_network,
@@ -148,3 +149,60 @@ def _compute_exclusivity(
         return 0.0
 
     return internal_strength / total_strength
+
+
+def _compute_single_group_features(
+    group: set[int],
+    adjacency: dict[int, dict[int, float]],
+) -> tuple[float, float]:
+    """Helper function computes coherence and exclusivity for a single group.
+
+    Args:
+        group (set[int]): Set of firm IDs in the group.
+        adjacency (dict[int, dict[int, float]]): Adjacency dictionary of the
+            co-bidding network.
+
+    Returns:
+        tuple[float, float]: (coherence, exclusivity)
+    """
+    internal_weights = _get_internal_edge_weights(group, adjacency)
+
+    coherence = _compute_coherence(internal_weights)
+    exclusivity = _compute_exclusivity(group, adjacency)
+
+    return coherence, exclusivity
+
+
+def _compute_group_features_table(
+    network_df: pd.DataFrame,
+    groups_df: pd.DataFrame,
+) -> pd.DataFrame:
+    """Function computes coherence and exclusivity for all detected groups.
+
+    Args:
+        network_df (pd.DataFrame): Co-bidding network edge list.
+        groups_df (pd.DataFrame): Long-format detected groups.
+
+    Returns:
+        pd.DataFrame: DataFrame with columns ['group_id', 'coherence', 'exclusivity'].
+    """
+    _validate_group_feature_inputs(network_df, groups_df)
+
+    adjacency = _build_adjacency_dict(network_df)
+
+    group_members = _recover_group_members(groups_df)
+
+    rows: list[dict[str, float]] = []
+
+    for group_id, group in group_members.items():
+        coherence, exclusivity = _compute_single_group_features(group, adjacency)
+
+        rows.append(
+            {
+                "group_id": group_id,
+                "coherence": coherence,
+                "exclusivity": exclusivity,
+            }
+        )
+
+    return pd.DataFrame(rows, columns=["group_id", "coherence", "exclusivity"])
