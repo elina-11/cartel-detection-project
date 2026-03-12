@@ -3521,8 +3521,8 @@ packages:
   timestamp: 1756729456476
 - pypi: ./
   name: final-project
-  version: 0.1.dev65+gac4496593.d20260311
-  sha256: 6f080204314f1b494a78ff1d2d783da082f96045b8d520d3eb86121278c19461
+  version: 0.1.dev77+gb5126c890
+  sha256: d27dc042ac031e87d7c1ee6223533a4f2c990d756a8ac33f620fae591bfa70e6
   requires_python: ==3.14
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/noarch/font-ttf-dejavu-sans-mono-2.37-hab24e00_0.tar.bz2
