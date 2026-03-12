@@ -88,7 +88,8 @@ tests/
 ```
 
 The workflow is executed using `pytask`, which automatically runs all tasks in the
-correct order based on their dependencies.
+correct order based on their dependencies. To keep run time low, ~4 minutes, 
+the number of simulations is kept to 100, though the paper used 5,000 simulations. 
 
 ## Usage
 
