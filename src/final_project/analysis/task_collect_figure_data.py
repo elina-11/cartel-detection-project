@@ -12,7 +12,7 @@ from final_project.analysis.group_detection import detect_groups
 from final_project.analysis.group_features import compute_group_features
 from final_project.config import BLD, SRC
 
-N_SIMULATIONS: int = 100
+N_SIMULATIONS: int = 500
 N_FIRMS: int = 50
 N_ISSUERS: int = 75
 N_ROUNDS: int = 2000
