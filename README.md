@@ -1,4 +1,4 @@
-# Project Topic
+# Replication of a Network-Based Cartel Detection Model
 
 ## Objective:
 
