@@ -2,11 +2,11 @@
 
 +++ {"part": "abstract"}
 
-This is just a demonstration of how a simple paper might look like. We write some text,
-include a figure and a table.
-
-If you are using this template, please cite this item from the references:
-{cite}`GaudeckerEconProjectTemplates`.
+This project studies collusion dynamics in procurement auction markets using an
+agent-based simulation model. Firms repeatedly interact in auctions, forming co-bidding
+networks that reveal patterns of interaction. We analyze the distribution of detected
+groups in the coherence–exclusivity feature space and examine how these structural
+properties relate to the emergence of collusion.
 
 +++
 
@@ -14,38 +14,30 @@ If you are using this template, please cite this item from the references:
 \clearpage
 ```
 
-The data set for the template project is taken from the
-[stats4schools website](https://www.stem.org.uk/resources/elibrary/resource/28452/large-datasets-stats4schools).
-It contains data on smoking habits in the UK, with 1691 observations and 12 variables.
+The simulation generates repeated auction interactions between firms and issuers. From
+these interactions we construct co-bidding networks and detect groups of firms. For each
+group we compute two structural measures: **coherence**, which captures the intensity
+and balance of interactions within the group, and **exclusivity**, which measures how
+isolated the group is from the rest of the market.
 
-We consider only 4 of the 12 features for the prediction of the variable `smoking`:
-`marital_status`, `highest_qualification`, `gender` and `age`. We model the dependence
-using a Logistic model. All numerical features are included linearly, while categorical
-features are expanded into dummy variables.
+Figure :A\` shows the distribution of detected groups across the coherence–exclusivity
+space. Figure :B illustrates how the rate of collusion varies across this feature space.
 
-Figure :ref:`fig:predictions` illustrates the model of smoking propensity by marital
-status over the lifetime. Table :ref:`tab:summary` contains the estimation results of
-the linear Logistic regression.
-
-```{figure} public/smoking_by_marital_status.png
+```{figure} ../bld/figures/figure_a.png
 ---
 width: 85%
-label: fig:predictions
+label: fig:distribution
 ---
-Model predictions of the smoking probability over the lifetime. Each
-colored line represents a case where marital status is fixed to one of the
-values present in the data set.
+(A) The distribution of groups observed from the resulting co-bidding networks
+in the binned coherence-exclusivity feature space.
 ```
 
-````{table} Estimation results of the linear Logistic regression.
+```{figure} ../bld/figures/figure_b.png
 ---
-label: tab:summary
-align: center
+width: 85%
+label: fig:collusion
 ---
-```{include} tables/estimation_results.md
-```
-
-````
-
-```{bibliography}
+(B) The rate of collusion by groups with given coherence-exclusivity.
+The model suggests that high coherence and exclusivity groups are not
+common, but that they have significantly higher rates of collusion.
 ```

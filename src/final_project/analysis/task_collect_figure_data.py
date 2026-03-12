@@ -10,17 +10,18 @@ from final_project.analysis.create_firms_and_issuers import create_firms, create
 from final_project.analysis.group_collusion_rate import compute_group_collusion_rates
 from final_project.analysis.group_detection import detect_groups
 from final_project.analysis.group_features import compute_group_features
-from final_project.config import BLD, SRC
-
-N_SIMULATIONS: int = 100
-N_FIRMS: int = 50
-N_ISSUERS: int = 75
-N_ROUNDS: int = 2000
-BURN_IN_ROUNDS: int = 1000
-
-FIRMS_SEED_BASE: int = 1000
-ISSUERS_SEED_BASE: int = 2000
-SIMULATION_SEED_BASE: int = 3000
+from final_project.config import (
+    BLD,
+    BURN_IN_ROUNDS,
+    FIRMS_SEED_BASE,
+    ISSUERS_SEED_BASE,
+    N_FIRMS,
+    N_ISSUERS,
+    N_ROUNDS,
+    N_SIMULATIONS,
+    SIMULATION_SEED_BASE,
+    SRC,
+)
 
 
 def task_collect_figure_data(

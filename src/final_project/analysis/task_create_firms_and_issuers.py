@@ -1,12 +1,7 @@
 from pathlib import Path
 
 from final_project.analysis.create_firms_and_issuers import create_firms, create_issuers
-from final_project.config import BLD, SRC
-
-N_FIRMS: int = 50
-N_ISSUERS: int = 75
-FIRMS_SEED: int = 42
-ISSUERS_SEED: int = 24
+from final_project.config import BLD, FIRMS_SEED, ISSUERS_SEED, N_FIRMS, N_ISSUERS, SRC
 
 
 def task_create_firms(

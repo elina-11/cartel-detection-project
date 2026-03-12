@@ -31,7 +31,7 @@ def run_single_round(
 ) -> None:
     """This will run one auction round.
 
-    Now this step:
+    This step:
     - Selects a random issuer
     - Generates a contract location near the issuer within the unit square
     - Selects participating firms based on the distance from the contract

@@ -85,11 +85,22 @@ tests/
     ├── test_group_features_helpers.py
     ├── test_group_features.py
     └── test_interaction_updates.py
+
+bld/
+├── data/                           # Intermediate data produced by the pipeline
+└── figures/                        # Generated figures for the paper
+    ├── figure_a.png
+    └── figure_b.png
+
+documents/
+
+├── paper.md                        # MyST Markdown source for the paper
+└── task_documents.py               # Tasks to compile paper and presentation
 ```
 
 The workflow is executed using `pytask`, which automatically runs all tasks in the
-correct order based on their dependencies. To keep run time low, ~4 minutes, 
-the number of simulations is kept to 100, though the paper used 5,000 simulations. 
+correct order based on their dependencies. To keep run time low, ~4 minutes, the number
+of simulations is kept to 100, though the paper used 5,000 simulations.
 
 ## Usage
 
@@ -115,5 +126,6 @@ This executes all tasks and generates intermediate results and final outputs as 
 
 ### Viewing Results
 
-- The final figures are generated and saved in: bld/figures/
+- The figures are generated and saved in: bld/figures/
 - The datasets used for generating the figures are stored in the bld directory.
+- The final output, the paper is saved in final-project-elina-11.
