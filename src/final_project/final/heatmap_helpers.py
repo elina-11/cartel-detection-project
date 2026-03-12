@@ -3,6 +3,8 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+BIN_SIZE = 20
+
 
 def _validate_group_features(df: pd.DataFrame) -> None:
     """Helper function validates the group-level DataFrame for final figures."""
@@ -24,7 +26,7 @@ def _validate_group_features(df: pd.DataFrame) -> None:
 
 def _bin_group_data(
     group_data: pd.DataFrame,
-    bins: int = 10,
+    bins: int = BIN_SIZE,
 ) -> pd.DataFrame:
     """Helper function adds coherence and exclusivity bin columns."""
     _validate_group_features(group_data)
@@ -53,13 +55,13 @@ def _bin_group_data(
 
 def _compute_heatmap_counts(
     group_data: pd.DataFrame,
-    bins: int = 10,
+    bins: int = BIN_SIZE,
 ) -> pd.DataFrame:
     """Helper function computes 2D bin counts for Figure A."""
     df = _bin_group_data(group_data, bins=bins)
 
     heatmap_counts = (
-        df.groupby(["coherence_bin", "exclusivity_bin"]).size().unstack(fill_value=0)
+        df.groupby(["exclusivity_bin", "coherence_bin"]).size().unstack(fill_value=0)
     )
 
     all_bins = range(bins)
@@ -75,13 +77,13 @@ def _compute_heatmap_counts(
 
 def _compute_heatmap_collusion_rate(
     group_data: pd.DataFrame,
-    bins: int = 10,
+    bins: int = BIN_SIZE,
 ) -> pd.DataFrame:
     """Function computes average collusion rate in each 2D bin for Figure B."""
     df = _bin_group_data(group_data, bins=bins)
 
     heatmap_rates = (
-        df.groupby(["coherence_bin", "exclusivity_bin"])["collusion_rate"]
+        df.groupby(["exclusivity_bin", "coherence_bin"])["collusion_rate"]
         .mean()
         .unstack(fill_value=0.0)
     )

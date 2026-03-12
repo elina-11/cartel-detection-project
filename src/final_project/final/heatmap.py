@@ -9,10 +9,12 @@ from final_project.final.heatmap_helpers import (
     _compute_heatmap_counts,
 )
 
+BIN_SIZE = 20
+
 
 def generate_figure_a(
     group_data: pd.DataFrame,
-    bins: int = 10,
+    bins: int = BIN_SIZE,
 ) -> plt.Figure:
     """Generate Figure A: distribution of detected groups."""
     heatmap_data = _compute_heatmap_counts(group_data, bins=bins)
@@ -34,7 +36,7 @@ def generate_figure_a(
 
 def generate_figure_b(
     group_data: pd.DataFrame,
-    bins: int = 10,
+    bins: int = BIN_SIZE,
 ) -> plt.Figure:
     """Generate Figure B: average collusion rate by bin."""
     heatmap_data = _compute_heatmap_collusion_rate(group_data, bins=bins)
