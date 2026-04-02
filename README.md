@@ -30,7 +30,7 @@ suspicious firm interactions.
   plots. This ensures that results are reproducible and automatically regenerated when
   tasks are rerun.
 
-- `pyproject.toml` Defines the reproducile environment with all required dependencies.
+- `pyproject.toml` Defines the reproducible environment with all required dependencies.
 
 - `config.py` Stores parameters and settings that are used across multiple tasks to
   avoid duplication and make project easier to maintain.
